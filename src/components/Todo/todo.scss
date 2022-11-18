@@ -1,0 +1,37 @@
+@use '../../styles/vars';
+
+.todo {
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	list-style: none;
+	border-radius: 5px;
+	border: 1px solid vars.$green;
+	margin: 0 0 8px 0;
+	transition: all 200ms ease;
+	&:hover {
+		box-shadow: 0 0 15px vars.$gray;
+	}
+
+	&__title {
+		margin: 0 0 0 10px;
+		flex-grow: 1;
+		cursor: pointer;
+	}
+
+	&__checkbox {
+		width: 24px;
+		height: 24px;
+		accent-color: vars.$green;
+		cursor: pointer;
+	}
+
+	&_done {
+		color: vars.$gray;
+		text-decoration: line-through;
+	}
+
+	&_late {
+		color: vars.$red;
+	}
+}

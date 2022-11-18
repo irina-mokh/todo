@@ -1,0 +1,30 @@
+@use '../../styles/vars';
+
+.app {
+
+  &__header {
+    background-color: vars.$green;
+    height: 70px;
+    .logo {
+      margin: auto 0;
+      font-size: 30px;
+      color: vars.$white;
+      font-weight: 700;
+    }
+  }
+}
+
+
+.main {
+  padding: 20px 0;
+  &__heading {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  &__list {
+    
+  }
+}
+
+
+
