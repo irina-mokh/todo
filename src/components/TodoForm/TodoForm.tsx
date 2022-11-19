@@ -1,11 +1,15 @@
 import { ITodo } from '../TodoThumb/TodoThumb';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import React, { useState, useEffect} from 'react';
+import React, { useContext, useState} from 'react';
 import { readFileAsync } from '../../utils';
+import { doc, setDoc, addDoc, collection } from 'firebase/firestore/lite';
+import { db } from '../../utils/firebase';
+import { State } from '../App/App';
 
 interface TodoFormProps {
 	item: ITodo;
 	create: boolean;
+	closeModal: () => void;
 }
 
 
@@ -22,96 +26,89 @@ export interface ITodoForm {
   title: string;
   description: string;
   deadline: string;
-  // file?: FileList | null;
+  file?: FileList | null;
   done: boolean;
 }
 
-export const TodoForm = ({create, item}: TodoFormProps) => {
-	const { file } = item;
+export const TodoForm = ({create, item, closeModal}: TodoFormProps) => {
+	const { id, file, fileName, title, description, deadline, done } = item;
+	const {state, setState} = useContext(State);
 	
-
-
 	const {
 		handleSubmit,
 		register,
-    watch,
 		formState: {isValid}
 	} = useForm<ITodoForm>({
-    defaultValues: create ? FORM_INITIAL : {...item},
+    defaultValues: create ? FORM_INITIAL : {title, description, deadline, done},
   });
 
-    
-	// useEffect(() => {
-  //   const subscription = watch((value) => {
-  //     if (value.file) {
-  //       const text = (value.file as FileList)[0].name;
-  //       setUploadText(text);
-				
-	// 			fileSrc = String(await readFileAsync(value.file[0]));
-  //     }
-  //   });
-
-
-  //   return () => subscription.unsubscribe();
-  // }, [watch]);
-
-	
-
 	const onSubmit: SubmitHandler<ITodoForm> = async (data) => {
-    // TODO: add todo
-		console.log('submit');
-		console.log(data);
-
 		const newTodo = {
 			...data,
 			file: upload,
+			fileName: uploadText,
 		}
+		if (create){
+			await addDoc(collection(db, "list"), {...newTodo});
 
-		console.log(newTodo);
+			const preserve = state.filter(todo => todo.id !== id);
+			setState([...preserve, {...newTodo, id}]);
+		} else {
+			await setDoc(doc(db, "list", id), {...newTodo});
+			const preserve = state.filter(todo => todo.id !== id);
+			setState([...preserve, {...newTodo, id}]);
+		}
+		closeModal();
   };
 
-
-	const [uploadText, setUploadText] = useState('Pick file');
+	const [fileErr, setFileErr] = useState('');
+	const [uploadText, setUploadText] = useState(fileName || 'Attachment...');
 	const [upload, setUpload] = useState(file);
 
 	const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		console.log(e);
 		const {files} = e.target;
+		setFileErr('');
 		if (files) {
+			if (files[0].size > 1048487) {
+				setFileErr('File is too big');
+			};
+			
 			setUpload(String(await readFileAsync(files[0])));
       setUploadText((files)[0].name);
 		}
 	}
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className="form">
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className="form">
 			<div className="form__row">
 				<label className="label">
-					<span className="label__text">Title:</span>
+					<span className="label__text">Title*:</span>
 					<input type="text" {...register('title', { required: true })} className="field" />
 				</label>
 				<label className="label">
-					<span className="label__text">Deadline:</span>
+					<span className="label__text">Deadline*:</span>
 					<input type="date" {...register('deadline', { required: true })} className="field"></input>
 				</label>
 				<label className="label done">
 					<span className="label__text">Completed:</span>
-					<input type="checkbox" {...register('done', { required: true })} className="field"></input>
+					<input type="checkbox" {...register('done')} className="field"></input>
 				</label>
 			</div>
 			<label className="label">
 				<span className="label__text">Description:</span>
-				<textarea rows={3} {...register('description', { required: true })} className="field textarea" ></textarea>
+				<textarea rows={3} {...register('description')} className="field textarea" ></textarea>
 			</label>
 			<label className="label upload btn">
 				{uploadText}
-				<input type="file" name="file" onChange={handleUpload} ></input>
+				<input type="file" {...register('file')} onChange={handleUpload} ></input>
 			</label>
 			{upload && <>
 				<a href={upload} download>{uploadText}</a>
-			</>
-			}
-			<input type="submit" value={create ? 'Add' : 'Save'} className="submit btn"></input>
+			</>}
+			{fileErr && <p className="error">{fileErr}</p>}
+			<input type="submit" value={create ? 'Add' : 'Save'} className="submit btn" disabled={!isValid}></input>
 		</form>
 	)
 }

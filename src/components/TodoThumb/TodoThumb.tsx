@@ -2,6 +2,8 @@ import { DocumentData } from 'firebase/firestore/lite';
 import { useEffect, useState } from 'react';
 import { Modal } from '../Modal/Modal';
 import { TodoForm } from '../TodoForm/TodoForm';
+import { setDoc, doc } from 'firebase/firestore/lite';
+import { db } from '../../utils/firebase';
 
 export interface ITodo extends DocumentData {
   id: string;
@@ -9,6 +11,7 @@ export interface ITodo extends DocumentData {
   description: string;
   deadline: string;
   file?: string;
+  fileName?: string;
   done: boolean;
 }
 
@@ -16,9 +19,14 @@ export const TodoThumb = (props: ITodo) => {
 	const {id, title, done, deadline} = props;
 
   const [isDone, setIsDone] = useState(done)
-  const toggleDone = () => {
+  const toggleDone = async () => {
     setIsDone(!isDone);
-    //TODO send to BE
+    const newTodo = {
+      ...props,
+      done: !isDone,
+    }
+    await setDoc(doc(db, "list", id), {...newTodo});
+
   }
 
   const [isLate, setIsLate] = useState(false)
@@ -46,7 +54,7 @@ export const TodoThumb = (props: ITodo) => {
       </p>
       {isModalTask && (
         <Modal close={closeTaskModal} title={`Task: ${title}`}>
-          <TodoForm item={{...props}} create={false}></TodoForm>
+          <TodoForm item={{...props}} create={false} closeModal={closeTaskModal}></TodoForm>
         </Modal>)}
     </li>
 	)

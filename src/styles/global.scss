@@ -43,6 +43,8 @@ main {
   display: block;
   background: transparent;
   border: 1px solid vars.$green;
+  color: vars.$green;
+
   padding: 0.5em 2em;
   font-size: 20px;
   font-weight: 700;
@@ -78,4 +80,8 @@ main {
   padding: 0.3em 0.5em;
   margin: 0;
   font-size: 20px;
+}
+
+.error {
+  color: vars.$red;
 }
