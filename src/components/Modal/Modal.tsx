@@ -2,23 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 type ModalProps = {
-  close: () => void,
   title: string,
   children: React.ReactNode,
+  close: () => void,
 };
 
 export const Modal = ({ close, children, title }: ModalProps) => {
-  const closeModal = (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
-    e.stopPropagation();
-    close();
-  };
+  // const {setIsModal} = useContext(State);
+  // const closeModal = (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+  //   e.stopPropagation();
+  //   close();
+  // };
 
   const modalContent = (
-    <div className="overlay" onClick={closeModal}>
+    <div className="overlay" onClick={close}>
       <div className='popup' onClick={(e) => e.stopPropagation()}>
         <header className="popup__header">
           {title && <h2>{title}</h2>}
-          <button className="close-btn" onClick={closeModal}>
+          <button className="close-btn" onClick={close}>
             🗙
           </button>
         </header>

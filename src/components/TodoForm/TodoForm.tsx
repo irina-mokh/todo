@@ -9,7 +9,7 @@ import { State } from '../App/App';
 interface TodoFormProps {
 	item: ITodo;
 	create: boolean;
-	closeModal: () => void;
+	close: () => void;
 }
 
 
@@ -30,9 +30,9 @@ export interface ITodoForm {
   done: boolean;
 }
 
-export const TodoForm = ({create, item, closeModal}: TodoFormProps) => {
+export const TodoForm = ({close, create, item}: TodoFormProps) => {
 	const { id, file, fileName, title, description, deadline, done } = item;
-	const {state, setState} = useContext(State);
+	const { state, setState } = useContext(State);
 	
 	const {
 		handleSubmit,
@@ -45,9 +45,10 @@ export const TodoForm = ({create, item, closeModal}: TodoFormProps) => {
 	const onSubmit: SubmitHandler<ITodoForm> = async (data) => {
 		const newTodo = {
 			...data,
-			file: upload,
-			fileName: uploadText,
+			file: upload || '',
+			fileName: upload ? fileName : '',
 		}
+		
 		if (create){
 			await addDoc(collection(db, "list"), {...newTodo});
 
@@ -58,7 +59,7 @@ export const TodoForm = ({create, item, closeModal}: TodoFormProps) => {
 			const preserve = state.filter(todo => todo.id !== id);
 			setState([...preserve, {...newTodo, id}]);
 		}
-		closeModal();
+		close();
   };
 
 	const [fileErr, setFileErr] = useState('');

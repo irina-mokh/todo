@@ -17,6 +17,7 @@ export interface ITodo extends DocumentData {
 
 export const TodoThumb = (props: ITodo) => {
 	const {id, title, done, deadline} = props;
+  const [isModal, setIsModal] = useState(false);
 
   const [isDone, setIsDone] = useState(done)
   const toggleDone = async () => {
@@ -37,10 +38,10 @@ export const TodoThumb = (props: ITodo) => {
     }
   }, [deadline]);
 
-  const [isModalTask, setIsModalTask] = useState(false)
-  const closeTaskModal = () => {
-    setIsModalTask(false);
+  const close = () => {
+    setIsModal(false);
   }
+
 	return (
 		<li key={id} className={`todo ${isDone ? 'todo_done' : ''} ${isLate && !isDone ? 'todo_late' : ''} `}>
       <input 
@@ -49,13 +50,12 @@ export const TodoThumb = (props: ITodo) => {
         checked={isDone}
         onChange={toggleDone}
         />
-      <p className='todo__title' onClick={()=>{setIsModalTask(true)}}>
+      <p className='todo__title' onClick={() => setIsModal(true)}>
         {title}
       </p>
-      {isModalTask && (
-        <Modal close={closeTaskModal} title={`Task: ${title}`}>
-          <TodoForm item={{...props}} create={false} closeModal={closeTaskModal}></TodoForm>
-        </Modal>)}
+      {isModal && (<Modal title={`Task: ${title}`} close={close}>
+        <TodoForm item={{...props}} create={false} close={close}></TodoForm>
+      </Modal>)}
     </li>
 	)
 }

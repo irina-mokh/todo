@@ -27,8 +27,11 @@
     margin-bottom: 10px;
     text-align: center;
   }
-  &__list {
-    
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 1em 0;
   }
 }
 
