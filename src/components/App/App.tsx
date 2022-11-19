@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { db, getList } from '../../utils/firebase';
-import { Todo } from '../Todo/Todo';
-import { todoType } from '../Todo/Todo';
+import { ITodo, TodoThumb } from '../TodoThumb/TodoThumb';
 
 export const App = () => {
-  const [data, setData] = useState<Array<todoType>>([]);
+  const [data, setData] = useState<Array<ITodo>>([]);
   useEffect(() => {
 
     const fetchData = async() => {
@@ -14,7 +13,7 @@ export const App = () => {
     fetchData();
   }, []);
 
-  const todos = data.map(todo => <Todo {...todo} />
+  const todos = data.map(todo => <TodoThumb {...todo} />
   )
   return (
     <div className="app">

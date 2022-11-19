@@ -1,7 +1,9 @@
 import { DocumentData } from 'firebase/firestore/lite';
 import { useEffect, useState } from 'react';
+import { Modal } from '../Modal/Modal';
+import { TodoForm } from '../TodoForm/TodoForm';
 
-export interface todoType extends DocumentData {
+export interface ITodo extends DocumentData {
   id: string;
   title: string;
   description: string;
@@ -9,7 +11,8 @@ export interface todoType extends DocumentData {
   file?: string;
   done: boolean;
 }
-export const Todo = (props: todoType) => {
+
+export const TodoThumb = (props: ITodo) => {
 	const {id, title, done, deadline} = props;
 
   const [isDone, setIsDone] = useState(done)
@@ -26,8 +29,10 @@ export const Todo = (props: todoType) => {
     }
   }, [deadline]);
 
-  const [isModal, setIsModal] = useState(false)
-  
+  const [isModalTask, setIsModalTask] = useState(false)
+  const closeTaskModal = () => {
+    setIsModalTask(false);
+  }
 	return (
 		<li key={id} className={`todo ${isDone ? 'todo_done' : ''} ${isLate && !isDone ? 'todo_late' : ''} `}>
       <input 
@@ -36,8 +41,13 @@ export const Todo = (props: todoType) => {
         checked={isDone}
         onChange={toggleDone}
         />
-      <p className='todo__title' onClick={() => setIsModal(true)}>{title}</p>
-      {isModal && (<div>popup</div>)}
+      <p className='todo__title' onClick={()=>{setIsModalTask(true)}}>
+        {title}
+      </p>
+      {isModalTask && (
+        <Modal close={closeTaskModal} title={`Task: ${title}`}>
+          <TodoForm item={{...props}} create={false}></TodoForm>
+        </Modal>)}
     </li>
 	)
 }

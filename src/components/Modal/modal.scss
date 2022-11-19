@@ -1,0 +1,44 @@
+@use '../../styles/vars';
+
+.overlay {
+	position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+  background-color:  rgba(73, 73, 73, 0.756);
+}
+
+.popup {
+	background-color: vars.$light;
+  min-width: 50%;
+  margin: 10vh auto;
+	animation: 0.2s ease-out 0s 1 slideInFromBottom;
+    @keyframes slideInFromBottom {
+      0% {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+	&__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em;
+		font-weight: 700;
+    background-color: vars.$green;
+    color: vars.$white;
+	}
+
+	&__body {
+    padding: 1em 2em;
+	}
+}

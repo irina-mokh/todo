@@ -1,5 +1,7 @@
 @use './global.scss';
 @use './vars.scss';
 @use '../components/App/app.scss';
-@use '../components/Todo/todo.scss';
+@use '../components/TodoThumb/todoThumb.scss';
+@use '../components//Modal/modal.scss';
+@use '../components/TodoForm/todoForm.scss';
 

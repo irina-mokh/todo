@@ -1,0 +1,56 @@
+@use '../../styles/vars';
+
+.form {
+	&__row {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+	.label {
+		display: inline-block;
+		&__text {
+			display: block;
+			font-size: 16px;
+			margin: 0 0 5px 0;
+			color: vars.$green;
+		}
+		display: block;
+		margin: 0 0 1.2em 0;
+		.field {
+			display: block;
+	
+			&[type=checkbox] {
+				display: inline-block;
+				width: 1em;
+				height: 1em;
+			}
+		}
+
+		&.done {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+			input {
+				margin: auto 0;
+			}
+		}
+	}
+	.upload {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 0 0 1em 0;
+		border: 1px solid vars.$green;
+		font-size: 16px;
+		font-weight: 400;
+		
+		input {
+			display: none;
+		}
+	}
+
+	.submit {
+		margin: 0 auto;
+	}
+}
