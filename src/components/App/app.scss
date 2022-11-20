@@ -27,11 +27,19 @@
     margin-bottom: 10px;
     text-align: center;
   }
+
+  &__list {
+    margin-bottom: 0.8em;
+  }
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 0 0 1em 0;
+  }
+
+  &__subheader {
+    margin-bottom: 0.3em;
   }
 }
 

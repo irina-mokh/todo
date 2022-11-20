@@ -2,16 +2,15 @@ import { ITodo } from '../TodoThumb/TodoThumb';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import React, { useContext, useState} from 'react';
 import { readFileAsync } from '../../utils';
-import { doc, setDoc, addDoc, collection } from 'firebase/firestore/lite';
+import { doc, setDoc, addDoc, collection  } from 'firebase/firestore/lite';
 import { db } from '../../utils/firebase';
-import { State } from '../App/App';
+import { Context } from '../App/App';
 
 interface TodoFormProps {
 	item: ITodo;
 	create: boolean;
 	close: () => void;
 }
-
 
 const FORM_INITIAL = {
 	// id: '',
@@ -32,7 +31,7 @@ export interface ITodoForm {
 
 export const TodoForm = ({close, create, item}: TodoFormProps) => {
 	const { id, file, fileName, title, description, deadline, done } = item;
-	const { state, setState } = useContext(State);
+	const { state, setState } = useContext(Context);
 	
 	const {
 		handleSubmit,
@@ -47,23 +46,25 @@ export const TodoForm = ({close, create, item}: TodoFormProps) => {
 			...data,
 			file: upload || '',
 			fileName: upload ? fileName : '',
+			id,
 		}
 		
 		if (create){
-			await addDoc(collection(db, "list"), {...newTodo});
-
-			const preserve = state.filter(todo => todo.id !== id);
-			setState([...preserve, {...newTodo, id}]);
+			await addDoc(collection(db, "list"), {...newTodo}).then(docRef => {
+				setState([...state, { ...newTodo, id: docRef.id}]);
+			})
 		} else {
 			await setDoc(doc(db, "list", id), {...newTodo});
-			const preserve = state.filter(todo => todo.id !== id);
-			setState([...preserve, {...newTodo, id}]);
+			const preserve = [...state];
+			const i = preserve.findIndex(todo => todo.id === id);
+			preserve[i] = newTodo;
+			setState([...preserve]);
 		}
 		close();
   };
 
 	const [fileErr, setFileErr] = useState('');
-	const [uploadText, setUploadText] = useState(fileName || 'Attachment...');
+	const [uploadText, setUploadText] = useState(fileName || 'Attachment(max 1MB)...');
 	const [upload, setUpload] = useState(file);
 
 	const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,7 +110,9 @@ export const TodoForm = ({close, create, item}: TodoFormProps) => {
 				<a href={upload} download>{uploadText}</a>
 			</>}
 			{fileErr && <p className="error">{fileErr}</p>}
-			<input type="submit" value={create ? 'Add' : 'Save'} className="submit btn" disabled={!isValid}></input>
+			<div className="form__row">
+				<input type="submit" value={create ? 'Add' : 'Save'} className="submit btn" disabled={!isValid}></input>
+			</div>
 		</form>
 	)
 }

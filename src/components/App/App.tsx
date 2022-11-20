@@ -9,38 +9,47 @@ type IState = {
   setState: Dispatch<SetStateAction<ITodo[]>>;
 }
 
-export const State = React.createContext<IState>({
+export const Context = React.createContext<IState>({
   state: [],
   setState: () => {},
 });
 
+const INITIAL_TODO = {
+  id: '',
+  title: '',
+  deadline: String(new Date()),
+  description: '',
+  done: false,
+};
 
 export const App = () => {
   const [data, setData] = useState<Array<ITodo>>([]);
   const [isModal, setIsModal] = useState(false);
-
+ 
   useEffect(() => {
     const fetchData = async() => {
       const res = await getList(db);
-      setData(Object(res).sort((a: ITodo, b: ITodo) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()));
+      setData(Object(res).sort((a: ITodo,b: ITodo) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()));
     }
     fetchData();
   }, []);
 
-  // sort by date
   useEffect(() => {
-    const sorted = data.sort((a,b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
-    setData(sorted);
-  }, [data]);
-
-  const todos = data.map(todo => <TodoThumb {...todo} />
-  );
-
+    setData(data.sort((a: ITodo,b: ITodo) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()));
+  }, [data])
+  
   const close = () => {
     setIsModal(false);
   }
+
+  const todos = data.sort((a: ITodo,b: ITodo) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
+
+  const completed = todos.filter(todo => todo.done).map(todo => <TodoThumb key={todo.id} {...todo} />)
+
+  const active = todos.filter(todo => !todo.done).map(todo => <TodoThumb key={todo.id} {...todo} />)
+
   return (
-    <State.Provider value={{state: [...data], setState: setData}}>
+    <Context.Provider value={{state: [...data], setState: setData}}>
       <div className="app">
         <header className="app__header">
           <div className='container'>
@@ -58,21 +67,17 @@ export const App = () => {
                   title={`New task`}>
                 <TodoForm
                   close={close}
-                  item={{
-                    id: '',
-                    title: '',
-                    deadline: String(new Date()),
-                    description: '',
-                    done: false,
-                  }}
+                  item={{...INITIAL_TODO, id: String(data.length)}}
                   create={true}></TodoForm>
               </Modal>)}
             </header>
-            <ul className="main__list">{todos}</ul>
+            <h2 className="main__subheader">Active: </h2>
+            <ul className="main__list">{active}</ul>
+            <h2 className="main__subheader">Completed: </h2>
+            <ul className="main__list">{completed}</ul>
           </div>
         </main>
-        
       </div>
-    </State.Provider>
+    </Context.Provider>
   );
 }

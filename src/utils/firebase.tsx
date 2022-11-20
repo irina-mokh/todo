@@ -26,7 +26,6 @@ export const db = getFirestore(app);
 export async function getList(db: any) {
   const todoCol = collection(db, 'list');  
   const todoSnapshot = await getDocs(todoCol);
-  // todoSnapshot.docs.set(todoSnapshot.docs.map((todo)=>todo.id));
   const todoList = todoSnapshot.docs.map(doc => {
     return {...doc.data(), id: doc.id};
     });

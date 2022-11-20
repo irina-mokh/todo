@@ -5,12 +5,11 @@
 	align-items: center;
 	padding: 10px;
 	list-style: none;
-	border-radius: 5px;
 	border: 1px solid vars.$green;
 	margin: 0 0 8px 0;
 	transition: all 200ms ease;
 	&:hover {
-		box-shadow: 0 0 15px vars.$gray;
+		box-shadow: 0 0 5px vars.$gray;
 	}
 
 	&__title {
@@ -29,9 +28,26 @@
 	&_done {
 		color: vars.$gray;
 		text-decoration: line-through;
+		.delete-btn {
+			color: vars.$gray;;
+		}
 	}
 
 	&_late {
 		color: vars.$red;
+	}
+}
+
+.delete-btn {
+	background-color: transparent;
+	opacity: 0.6;
+	color: vars.$red;
+
+	border: none;
+	margin: 0 0 0 1em;
+	font-size: 1.2em;
+	line-height: 1em;
+	&:hover {
+		opacity: 1;
 	}
 }
