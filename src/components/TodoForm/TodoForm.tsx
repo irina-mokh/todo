@@ -41,6 +41,15 @@ export const TodoForm = ({close, create, item}: TodoFormProps) => {
     defaultValues: create ? FORM_INITIAL : {title, description, deadline, done},
   });
 
+	/** 
+	 * Handle form submit
+	 * @param {title} data.title - Title of Todo
+	 * @param {description} data.description - description of Todo
+	 * @param {deadline} data.deadline - Date of deadline YYYY-MM-DD (from input type date format)
+	 * @param {file} data.file -  File in base64(not required)
+	 * @param {fileName} data.fileName - Name of uploaded file
+	 * @param {id} data.id - Empty for new Todo(get after generating it on server) / From db
+	 * */
 	const onSubmit: SubmitHandler<ITodoForm> = async (data) => {
 		const newTodo = {
 			...data,
@@ -74,7 +83,10 @@ export const TodoForm = ({close, create, item}: TodoFormProps) => {
 			if (files[0].size > 1048487) {
 				setFileErr('File is too big');
 			};
-			
+			/**
+			 * Convert file into base64
+			 * @param {file} files[0] - file uploaded 
+			 */
 			setUpload(String(await readFileAsync(files[0])));
       setUploadText((files)[0].name);
 		}

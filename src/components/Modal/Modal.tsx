@@ -8,12 +8,6 @@ type ModalProps = {
 };
 
 export const Modal = ({ close, children, title }: ModalProps) => {
-  // const {setIsModal} = useContext(State);
-  // const closeModal = (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
-  //   e.stopPropagation();
-  //   close();
-  // };
-
   const modalContent = (
     <div className="overlay" onClick={close}>
       <div className='popup' onClick={(e) => e.stopPropagation()}>
@@ -28,5 +22,6 @@ export const Modal = ({ close, children, title }: ModalProps) => {
     </div>
   );
   const root = document.getElementById('modal-root');
+  
   return root ? ReactDOM.createPortal(modalContent, root) : null;
 };

@@ -9,14 +9,16 @@
 
 	.label {
 		display: inline-block;
+		display: block;
+		margin: 0 0 1.2em 0;
+
 		&__text {
 			display: block;
 			font-size: 16px;
 			margin: 0 0 5px 0;
 			color: vars.$green;
 		}
-		display: block;
-		margin: 0 0 1.2em 0;
+
 		.field {
 			display: block;
 	
@@ -36,6 +38,7 @@
 			}
 		}
 	}
+	
 	.upload {
 		display: flex;
 		justify-content: center;

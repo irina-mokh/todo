@@ -8,6 +8,7 @@
 	border: 1px solid vars.$green;
 	margin: 0 0 8px 0;
 	transition: all 200ms ease;
+
 	&:hover {
 		box-shadow: 0 0 5px vars.$gray;
 	}
@@ -42,11 +43,11 @@
 	background-color: transparent;
 	opacity: 0.6;
 	color: vars.$red;
-
 	border: none;
 	margin: 0 0 0 1em;
 	font-size: 1.2em;
 	line-height: 1em;
+	
 	&:hover {
 		opacity: 1;
 	}

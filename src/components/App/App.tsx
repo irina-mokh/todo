@@ -26,6 +26,11 @@ export const App = () => {
   const [data, setData] = useState<Array<ITodo>>([]);
   const [isModal, setIsModal] = useState(false);
  
+  /** 
+   * Fetch data from db on component mount
+   * Sort Todos by deadline
+   * set data to state
+   */
   useEffect(() => {
     const fetchData = async() => {
       const res = await getList(db);
@@ -34,14 +39,23 @@ export const App = () => {
     fetchData();
   }, []);
 
+  /** 
+   * Resort data by deadline on data change
+   */
   useEffect(() => {
     setData(data.sort((a: ITodo,b: ITodo) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()));
   }, [data])
   
+  /** 
+   * Close modal component
+   */
   const close = () => {
     setIsModal(false);
   }
 
+  /** 
+   * SPlit data for categories: completed and active
+   */
   const todos = data.sort((a: ITodo,b: ITodo) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
 
   const completed = todos.filter(todo => todo.done).map(todo => <TodoThumb key={todo.id} {...todo} />)
@@ -71,10 +85,14 @@ export const App = () => {
                   create={true}></TodoForm>
               </Modal>)}
             </header>
-            <h2 className="main__subheader">Active: </h2>
-            <ul className="main__list">{active}</ul>
-            <h2 className="main__subheader">Completed: </h2>
-            <ul className="main__list">{completed}</ul>
+            <section className="main__section">
+              <h2 className="main__subheader">Active: </h2>
+              <ul className="main__list">{active}</ul>
+            </section>
+            <section className="main__section">
+              <h2 className="main__subheader">Completed: </h2>
+              <ul className="main__list">{completed}</ul>
+            </section>
           </div>
         </main>
       </div>

@@ -5,6 +5,7 @@
   &__header {
     background-color: vars.$green;
     height: 70px;
+    
     .logo {
       display: flex;
       justify-content: center;
@@ -23,14 +24,17 @@
 
 .main {
   padding: 20px 0;
+
   &__heading {
     margin-bottom: 10px;
     text-align: center;
   }
 
   &__list {
-    margin-bottom: 0.8em;
+    margin: 0.8em auto;
+    
   }
+
   &__header {
     display: flex;
     align-items: center;

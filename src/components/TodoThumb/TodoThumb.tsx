@@ -33,14 +33,18 @@ export const TodoThumb = (props: ITodo) => {
       done: !isDone,
       id, 
     }
-    await setDoc(doc(db, "list", id), {...newTodo});
 
+    /** Update server db*/
+    await setDoc(doc(db, "list", id), {...newTodo});
+    
+    /** Update client state*/
     const preserve = [...state];
     const i = preserve.findIndex(todo => todo.id === id);
     preserve[i] = newTodo;
 		setState([...preserve]);
   }
 
+    /** Check if todo is out of deadline for today*/
   useEffect(() => {
     const today =  new Date().toJSON().slice(0,10).replace(/-/g,'-');
     if (new Date(today) > new Date(deadline)){
@@ -55,8 +59,11 @@ export const TodoThumb = (props: ITodo) => {
   };
 
   const deleteTodo = async () => {
+    /** Update client state*/
 		const filtered = state.filter(todo => todo.id !== id);
 		setState([...filtered]);
+    
+    /** Delete Todo on server db*/
 		await deleteDoc(doc(db, "list", id));
 	};
 
