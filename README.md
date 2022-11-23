@@ -1,8 +1,4 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
+**Deploy**: https://todo-a2c04.firebaseapp.com/
 
 In the project directory, you can run:
 
