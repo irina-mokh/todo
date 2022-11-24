@@ -5,16 +5,15 @@ name: Deploy to Firebase Hosting on merge
 'on':
   push:
     branches:
-      - test
+      - master
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TEST_APP_59ADD }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TODO_A2C04 }}'
           channelId: live
-          projectId: test-app-59add
+          projectId: todo-a2c04
