@@ -9,11 +9,15 @@ type ModalProps = {
 
 export const Modal = ({ close, children, title }: ModalProps) => {
   const modalContent = (
-    <div className="overlay" onClick={close}>
+    <div className="overlay" onClick={close} onKeyDown={(e) => {
+      if ((e.key = 'Escape')) {
+        close();
+      }
+    }}>
       <div className='popup' onClick={(e) => e.stopPropagation()}>
         <header className="popup__header">
           {title && <h2>{title}</h2>}
-          <button className="close-btn" onClick={close}>
+          <button className="close-btn" onClick={close} aria-label="close">
             🗙
           </button>
         </header>
